@@ -59,6 +59,18 @@ body {
   margin-top: 28px;
 }
 
+/* Custom style */
+html, body, main {
+  height: 100%;
+}
+
+.talkin-sidebar {
+  float: left;
+  width: 300px;
+  height: 100%;
+  padding: 10px 20px;
+}
+
 /* Responsive: Portrait tablets and up */
 @media screen and (min-width: 768px) {
   .container {

@@ -4,6 +4,7 @@
 			'jquery': '../bower_components/jquery/dist/jquery.min',
 			'angular': '../bower_components/angular/angular.min',
 			'ui.router': '../bower_components/angular-ui-router/release/angular-ui-router.min',
+			'ui.bootstrap': '../bower_components/angular-bootstrap/ui-bootstrap.min',
 			'app': 'app',
 			'bootstrap': 'bootstrap'
 		},
@@ -15,7 +16,10 @@
 				deps: ['jquery'],
 				exports: 'angular'
 			},
-			'ui-router': {
+			'ui.router': {
+				deps: ['angular']
+			},
+			'ui.bootstrap': {
 				deps: ['angular']
 			}
 		}
