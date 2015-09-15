@@ -64,11 +64,60 @@ html, body, main {
   height: 100%;
 }
 
+.inline-block {
+  display: inline-block;
+}
+
 .talkin-sidebar {
   float: left;
   width: 300px;
   height: 100%;
   padding: 10px 20px;
+}
+
+.talkin-message-panel {
+  position: absolute;
+  top: 0;
+  bottom: 40px;
+  right: 0;
+  left: 300px;
+  overflow: auto;
+  background-color: #ccc;
+}
+
+.message-flow {
+  position: relative;
+  padding-top: 15px;
+/*  padding-left: 20px;
+  padding-right: 20px; */
+}
+
+.message-flow-list {
+  list-style: none;
+}
+
+.message-item-avatar {
+  display: inline-block;
+  width: 10%;
+  vertical-align: top;
+}
+
+.message-item-content {
+  display: inline-block;
+  width: 80%;
+  vertical-align: top;
+}
+
+.message-input-box {
+  position: fixed;
+  bottom: 0;
+  left: 300px;
+  height: 40px;
+}
+
+.message-input-box .form-control,
+.message-input-box .btn {
+  height: 40px;
 }
 
 /* Responsive: Portrait tablets and up */

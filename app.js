@@ -9,10 +9,11 @@ var mongoose = require('mongoose');
 var debug = require('debug')('talkin:server');
 var http = require('http');
 
-var routes = require('./server/routes/index');
-var users = require('./server/routes/users');
+// var routes = require('./server/routes/index');
+// var users = require('./server/routes/users');
 
 var app = express();
+var rootDir = '';
 
 // connect to mongodb
 mongoose.connect('mongodb://localhost/talkin', function(err) {
@@ -25,9 +26,9 @@ mongoose.connect('mongodb://localhost/talkin', function(err) {
 
 // view engine setup
 // app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
+// app.set('view engine', 'ejs');
 app.set('env', 'development');
-app.engine('html', require('ejs').renderFile);
+// app.engine('html', require('ejs').renderFile);
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -36,42 +37,38 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 // app.use(express.static(path.join(__dirname, 'public')));
-
-app.use('/', routes);
-app.use('/users', users);
+// app.use('/users', users);
 
 // error handlers
 
 // development error handler
 // will print stacktrace
-if (app.get('env') === 'development') {
-  app.set('views', __dirname + '/app'); 
-  app.use(express.static(path.join(__dirname, 'app')));
-} else {
-  app.set('views', __dirname + '/dist'); 
-  app.use(express.static(path.join(__dirname, 'dist')));
-}
+rootDir = app.get('env') === 'development' ? 'app' : 'dist';
+// app.set('views', __dirname + '/app'); 
+app.use(express.static(path.join(__dirname, rootDir)));
+
+app.get('/', function(req, res){
+  res.sendFile(path.join(__dirname, rootDir, ' index.html'));
+});
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
-});
+// app.use(function(req, res, next) {
+//   var err = new Error('Not Found');
+//   err.status = 404;
+//   next(err);
+// });
 
-// production error handler
-// no stacktraces leaked to user
-app.use(function(err, req, res, next) {
-  res.status(err.status || 500);
-  res.render('404.html', {
-    message: err.message,
-    error: {}
-  });
-});
-
+// // production error handler
+// // no stacktraces leaked to user
+// app.use(function(err, req, res, next) {
+//   res.status(err.status || 500);
+//   res.sendFile(path.join(__dirname, rootDir, '404.html'), {
+//     message: err.message,
+//     error: {}
+//   });
+// });
 
 module.exports = app;
-
 
 /**
  * Get port from environment and store in Express.
@@ -84,15 +81,26 @@ app.set('port', port);
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
+var server = app.listen(port);
 
 /**
  * Listen on provided port, on all network interfaces.
  */
+var io = require('socket.io').listen(server);
+
+io.on('connection', function(socket) {
+  console.log('connected');
+  socket.emit('news', {hello: 'world'});
+});
 
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
+
+/**
+ * Listen for socket connection
+ */
+
 
 /**
  * Normalize a port into a number, string, or false.
