@@ -88,6 +88,7 @@ var server = app.listen(port);
  */
 var messages = [];
 
+
 var io = require('socket.io').listen(server);
 
 io.on('connection', function (socket) {
@@ -105,9 +106,12 @@ io.on('connection', function (socket) {
   });
 
   socket.on('disconnect', function () {
-    console.log('A user disconnected.')
+    console.log('A user disconnected.');
   });
-  socket.emit('news', {hello: 'world'});
+  
+  socket.on('channel.join', function (channel) {
+    socket.join(channel); 
+  });
 });
 
 server.listen(port);

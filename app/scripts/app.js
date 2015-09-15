@@ -1,10 +1,12 @@
 define([
   'angular',
+  'angular-animate',
   'ui.router',
   'ui.bootstrap'
 ], function (angular) {
   'use strict';
-  return angular.module('talkinApp', ['ui.router', 'ui.bootstrap', 'talkin.controllers', 'talkin.states', 'talkin.services']);
+  return angular.module('talkinApp', ['ngAnimate', 'ui.router', 'ui.bootstrap', 
+  	'talkin.controllers', 'talkin.states', 'talkin.services']);
 })
 
 /**

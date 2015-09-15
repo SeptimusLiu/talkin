@@ -4,6 +4,15 @@ define(['controllers/module'], function(controllers) {
 
 	function indexControllerFunc($scope, socketService) {
 		$scope.messages = [];
+		$scope.rooms = [
+			{ name: 'Room 1', active: true },
+			{ name: 'Room 2' },
+			{ name: 'Room 3' }
+		];
+		$scope.whisperers = [
+			{ name: 'User 1', active: true },
+			{ name: 'User 2' }
+		]
 		socketService.on('messages.read', function (messages) {
 			$scope.messages = messages;
 		});
