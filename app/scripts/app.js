@@ -4,7 +4,7 @@ define([
   'ui.bootstrap'
 ], function (angular) {
   'use strict';
-  return angular.module('talkinApp', ['ui.router', 'ui.bootstrap', 'talkin.controllers', 'talkin.states']);
+  return angular.module('talkinApp', ['ui.router', 'ui.bootstrap', 'talkin.controllers', 'talkin.states', 'talkin.services']);
 })
 
 /**

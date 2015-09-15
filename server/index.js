@@ -16,7 +16,7 @@ var app = express();
 var rootDir = '';
 
 // connect to mongodb
-mongoose.connect('mongodb://localhost/talkin', function (err) {
+mongoose.connect('mongodb://localhost/talkin', function(err) {
     if(err) {
         console.log('connection error', err);
     } else {
@@ -32,7 +32,7 @@ app.set('env', 'development');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-// app.use(logger('dev'));
+app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -45,10 +45,10 @@ app.use(cookieParser());
 // will print stacktrace
 rootDir = app.get('env') === 'development' ? 'app' : 'dist';
 // app.set('views', __dirname + '/app'); 
-app.use(express.static(path.join(__dirname, rootDir)));
+// app.use(express.static(path.join(__dirname, '../', rootDir)));
 
-app.get('/', function (req, res){
-  res.sendFile(path.join(__dirname, rootDir, ' index.html'));
+app.get('/', function(req, res){
+  res.sendFile(path.join(__dirname, '../', rootDir, '/index.html'));
 });
 
 // catch 404 and forward to error handler
@@ -74,45 +74,31 @@ module.exports = app;
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3000');
-app.set('port', port);
+// var port = normalizePort(process.env.PORT || '3000');
+// app.set('port', port);
 
 /**
  * Create HTTP server.
  */
+
+var port = normalizePort(process.env.PORT || '3000');
+app.set('port', port);
 
 var server = app.listen(port);
 
 /**
  * Listen on provided port, on all network interfaces.
  */
-var messages = [];
-
 var io = require('socket.io').listen(server);
 
-io.on('connection', function (socket) {
-  console.log('A user connected.');
-
-  socket.on('messages.read', function () {
-    console.log('message reading');
-    socket.emit('messages.read', messages);
-  });
-
-  socket.on('messages.create', function (message) {
-    console.log('message created');
-    messages.push(message);
-    io.sockets.emit('messages.add', message);
-  });
-
-  socket.on('disconnect', function () {
-    console.log('A user disconnected.')
-  });
+io.on('connection', function(socket) {
+  console.log('connected');
   socket.emit('news', {hello: 'world'});
 });
 
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
+// server.listen(port);
+// server.on('error', onError);
+// server.on('listening', onListening);
 
 /**
  * Listen for socket connection

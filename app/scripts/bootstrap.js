@@ -3,6 +3,7 @@ define([
 	'app',
 	// 'socket.io',
 	'controllers/_base',
+	'services/_base',
 	'states/_base'
 ], function(angular) {
 	'use strict';

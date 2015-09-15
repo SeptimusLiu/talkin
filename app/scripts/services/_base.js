@@ -1,0 +1,5 @@
+define([
+	'./module','./socket'
+],function(){
+	
+})
