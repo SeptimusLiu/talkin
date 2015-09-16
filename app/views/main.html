@@ -1,23 +1,44 @@
-<div class="jumbotron">
-  <h1>'Allo, 'Allo!</h1>
-  <p class="lead">
-    <img src="images/yeoman.png" alt="I'm Yeoman"><br>
-    Always a pleasure scaffolding your apps.
-  </p>
-  <p><a class="btn btn-lg btn-success" ng-href="#/">Splendid!<span class="glyphicon glyphicon-ok"></span></a></p>
+<div class="talkin-sidebar">
+  <accordion close-others="false">
+    <accordion-group heading="Rooms" is-open="true">
+      <tabset vertical="true" type="'pills'">
+        <tab ng-repeat="room in mainCtrl.rooms"
+        heading="{{ room.name }}" active="room.active"></tab>
+      </tabset>
+    </accordion-group>
+
+    <accordion-group heading="Private Messages" is-open="true">
+      <tabset vertical="true" type="'pills'">
+        <tab ng-repeat="whisperer in mainCtrl.whisperers"
+        heading="{{ whisperer.name }}" active="whisperer.active"></tab>
+      </tabset>
+    </accordion-group>
+  <accordion>
 </div>
 
-<div class="row marketing">
-  <h4>HTML5 Boilerplate</h4>
-  <p>
-    HTML5 Boilerplate is a professional front-end template for building fast, robust, and adaptable web apps or sites.
-  </p>
+<div class="talkin-message-panel">
+  <div class="message-flow">
+    <ul class="message-flow-list">
+      <li class="message-flow-list-item" ng-repeat="message in mainCtrl.messages track by $index">
+        <div class="message-item-avatar">
+          <img src="/images/yeoman.png" height="60" width="60">
+        </div>
+        <div class="message-item-content">
+          <div>
+            <span>Name</span><span>10:30 PM</span>
+            <p>{{ message }}</p>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
 
-  <h4>Angular</h4>
-  <p>
-    AngularJS is a toolset for building the framework most suited to your application development.
-  </p>
-
-  <h4>Karma</h4>
-  <p>Spectacular Test Runner for JavaScript.</p>
+<div class="message-input-box">
+  <div class="input-group">
+    <input type="text" class="form-control" placeholder="I wanna say..." ng-model="mainCtrl.message">
+    <span class="input-group-btn">
+      <button ng-click="mainCtrl.sendMessage()" class="btn btn-primary" type="button">SEND</button>
+    </span>
+  </div>
 </div>

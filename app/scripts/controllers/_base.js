@@ -1,5 +1,5 @@
 define([
-	'./main', './index', './module'
+	'./main', './index', './module', './login'
 ], function() {
 
 })

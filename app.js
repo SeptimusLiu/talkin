@@ -16,13 +16,13 @@ var app = express();
 var rootDir = '';
 
 // connect to mongodb
-mongoose.connect('mongodb://localhost/talkin', function (err) {
-    if(err) {
-        console.log('connection error', err);
-    } else {
-        console.log('connection successful');
-    }
-});
+// mongoose.connect('mongodb://localhost/talkin', function (err) {
+//     if(err) {
+//         console.log('connection error', err);
+//     } else {
+//         console.log('connection successful');
+//     }
+// });
 
 // view engine setup
 // app.set('views', path.join(__dirname, 'views'));
@@ -86,8 +86,8 @@ var server = app.listen(port);
 /**
  * Listen on provided port, on all network interfaces.
  */
-var messages = [];
-
+var messages = [],
+    users = [];
 
 var io = require('socket.io').listen(server);
 

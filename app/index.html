@@ -56,67 +56,7 @@
     </header> -->
 
     <main ng-controller="indexController" class="talkin-container">
-      <div class="talkin-sidebar">
-
-        <accordion close-others="false">
-          <accordion-group heading="Rooms" is-open="true">
-            <tabset vertical="true" type="'pills'">
-              <tab ng-repeat="room in rooms"
-              heading="{{ room.name }}" active="room.active"></tab>
-            </tabset>
-          </accordion-group>
-
-          <accordion-group heading="Private Messages" is-open="true">
-            <tabset vertical="true" type="'pills'">
-              <tab ng-repeat="whisperer in whisperers"
-              heading="{{ whisperer.name }}" active="whisperer.active"></tab>
-            </tabset>
-          </accordion-group>
-        <accordion>
-        <!-- <div class="talkin-sidebar-room">
-          <ul class="nav nav-pills nav-stacked">
-            <li role="presentation" class="active"><a href="#">Room 1</a></li>
-            <li role="presentation"><a href="#">Room 2</a></li>
-            <li role="presentation"><a href="#">Room 3</a></li>
-          </ul>
-        </div>
-        <div class="talkin-sidebar-message">
-          <ul class="nav nav-pills nav-stacked">
-            <li role="presentation" class="active"><a href="#">Message 1</a></li>
-            <li role="presentation"><a href="#">Message 2</a></li>
-            <li role="presentation"><a href="#">Message 3</a></li>
-          </ul>
-        </div> -->
-      </div>
-
-      <div class="talkin-message-panel">
-        <div class="message-flow">
-          <ul class="message-flow-list">
-            <li class="message-flow-list-item" ng-repeat="message in messages">
-              <div class="message-item-avatar">
-                <img src="/images/yeoman.png" height="60" width="60">
-              </div>
-              <div class="message-item-content">
-                <div>
-                  <span>Name</span><span>10:30 PM</span>
-                  <p>{{ message }}</p>
-                </div>
-              </div>
-            </li>
-          </ul>
-        </div>
-
-
-      </div>
-       <div class="message-input-box">
-          <div class="input-group">
-            <input type="text" class="form-control" placeholder="I wanna say..." ng-model="message">
-            <span class="input-group-btn">
-              <button ng-click="sendMessage()" class="btn btn-primary" type="button">SEND</button>
-            </span>
-          </div>
-        </div>
-      <div ui-view=""></div>
+      <div ui-view="">
     </main>
 
   <!--   <footer class="footer">
