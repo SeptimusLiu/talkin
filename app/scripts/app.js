@@ -6,7 +6,7 @@ define([
 ], function (angular) {
   'use strict';
   return angular.module('talkinApp', ['ngAnimate', 'ui.router', 'ui.bootstrap', 
-  	'talkin.controllers', 'talkin.states', 'talkin.services']);
+  	'talkin.controllers', 'talkin.states', 'talkin.services', 'talkin.directives']);
 })
 
 /**

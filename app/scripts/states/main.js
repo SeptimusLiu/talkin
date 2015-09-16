@@ -4,7 +4,7 @@ define(['states/module'],
       ['$stateProvider', '$urlRouterProvider',
         function ($stateProvider, $urlRouterProvider) {
           $urlRouterProvider
-            .otherwise('/');
+            .otherwise('/main');
 
           $stateProvider
             .state("main", {

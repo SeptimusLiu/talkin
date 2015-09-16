@@ -1,3 +1,10 @@
-<div>
-	Login in
+<div class="login-wrapper">
+	<form name="loginForm" class="form-inline" ng-submit="loginCtrl.submit()" novalidate>
+	  <div class="form-group has-success has-feedback">
+	    <input type="text" class="form-control" id="nickname" name="nickname" placeholder="Enter a nickname" ng-model="loginCtrl.loginForm.nickname" ng-pattern="/[\w]+/" required>
+	    <span ng-show="loginCtrl.loginForm.nickname.$valid" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+	  </div>
+	  <button class="btn btn-default">Pick me a name!</button>
+	  <button type="submit" class="btn btn-primary">Let's talk</button>
+	</form>
 </div>

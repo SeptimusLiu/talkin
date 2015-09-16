@@ -124,6 +124,28 @@ html, body, main {
   height: 40px;
 }
 
+.login-container {
+  display: table;
+  margin: auto;
+}
+
+.login-wrapper {
+  height: 100%;
+  text-align: center;
+}
+
+.login-wrapper:before {
+  content: "";
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+}
+
+.login-wrapper .form-inline {
+  display: inline-block;
+  vertical-align: middle;
+}
+
 /* Responsive: Portrait tablets and up */
 @media screen and (min-width: 768px) {
   .container {
