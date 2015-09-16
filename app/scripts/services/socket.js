@@ -3,7 +3,7 @@ define(['services/module'], function (serviceModule) {
     socketServiceFunc.$inject = ['$rootScope'];
 
     function socketServiceFunc($rootScope) {
-      var socket = io();
+      var socket = io('ws://localhost:3000');
       var socketListeners = {
         on: function(eventName, callback) {
           socket.on(eventName, function () {
