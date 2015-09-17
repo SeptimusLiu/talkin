@@ -19,7 +19,13 @@ define(['controllers/module'], function(controllers) {
 		];
 
 		messageService.recvMessage(function (messageItem) {
-			vm.messages.push(messageItem.message);
+			if (messageItem) {
+				var index = _getTagIndexById(vm.channels, messageItem.channel_id);
+				if (index == _getActiveTag(vm.channels)) {
+					vm.messages.push(messageItem.message);
+				}
+			}
+			
 		});
 		
 		vm.sendMessage = sendMessageFunc;
@@ -28,7 +34,12 @@ define(['controllers/module'], function(controllers) {
 
 		function getMessagesFunc(channelId) {
 			messageService.getMessages(channelId).then(function (messageList) {
-				vm.messages = messageList.messages ? messageList.messages : [];
+				if (messageList) {
+					var index = _getTagIndexById(vm.channels, messageList.channel_id);
+					if (index == _getActiveTag(vm.channels)) {
+						vm.messages = messageList.messages ? messageList.messages : [];
+					}
+				}
 			});
 		}
 
@@ -108,6 +119,15 @@ define(['controllers/module'], function(controllers) {
 					activeIndex = index;
 			});
 			return activeIndex;
+		}
+
+		function _getTagIndexById(tags, id) {
+			var resIndex = -1;
+			angular.forEach(tags, function(item, index) {
+				if (item.id === id)
+					resIndex = index;
+			});
+			return resIndex;
 		}
 	}
 })
