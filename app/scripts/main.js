@@ -4,6 +4,7 @@
 			'jquery': '../bower_components/jquery/dist/jquery.min',
 			'angular': '../bower_components/angular/angular.min',
 			'angular-animate': '../bower_components/angular-animate/angular-animate.min',
+			'angular-cookies': '../bower_components/angular-cookies/angular-cookies.min',
 			'ui.router': '../bower_components/angular-ui-router/release/angular-ui-router.min',
 			'ui.bootstrap': '../bower_components/angular-bootstrap/ui-bootstrap-tpls.min',
 			// 'bootstrap-tpl': '../bower_components/angular-bootstrap/ui-bootstrap-tpls',
@@ -20,6 +21,9 @@
 				exports: 'angular'
 			},
 			'angular-animate': {
+				deps: ['angular']
+			},
+			'angular-cookies': {
 				deps: ['angular']
 			},
 			'ui.router': {

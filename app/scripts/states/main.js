@@ -4,18 +4,23 @@ define(['states/module'],
       ['$stateProvider', '$urlRouterProvider',
         function ($stateProvider, $urlRouterProvider) {
           $urlRouterProvider
-            .otherwise('/main');
+            .otherwise('/');
 
           $stateProvider
             .state("main", {
-              url: "/main",
+              url: "/",
+              resolve: {
+                getUserPromise: ['loginService', function (loginService) {
+                  return loginService.getUser()
+                    .then(function (userItem) {
+                      return userItem;
+                    }, function () {
+                      return null;
+                    });
+                }] 
+              },
               controller: 'mainController as mainCtrl',
               templateUrl: 'views/main.html'
-            })
-            // .state("main.user", {
-            //   url: "/user",
-            //   controller: "userController as userCtrl",
-            //   templateUrl: 'views/about.html'
-            // })
+            });
         }])
   })

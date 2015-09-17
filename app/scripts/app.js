@@ -1,11 +1,12 @@
 define([
   'angular',
   'angular-animate',
+  'angular-cookies',
   'ui.router',
   'ui.bootstrap'
 ], function (angular) {
   'use strict';
-  return angular.module('talkinApp', ['ngAnimate', 'ui.router', 'ui.bootstrap', 
+  return angular.module('talkinApp', ['ngAnimate', 'ngCookies', 'ui.router', 'ui.bootstrap', 
   	'talkin.controllers', 'talkin.states', 'talkin.services', 'talkin.directives']);
 })
 

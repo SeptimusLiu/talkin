@@ -3,8 +3,11 @@ define(['directives/module'], function(directives) {
 
 	function nicknameValidateFunc() {
 		return {
-			link: function (scope, element, attr) {
-
+			require: 'ngModel',
+			link: function (scope, element, attrs, ctrl) {
+				scope.$watch(attrs.ngModel, function (value) {
+					ctrl.$setValidity('pattern', /^[a-zA-Z0-9_]+$/.test(value));
+				});
 			}
 		}
 	}

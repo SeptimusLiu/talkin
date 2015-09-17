@@ -51,48 +51,31 @@ app.get('/', function (req, res){
   res.sendFile(path.join(__dirname, rootDir, ' index.html'));
 });
 
-// catch 404 and forward to error handler
-// app.use(function(req, res, next) {
-//   var err = new Error('Not Found');
-//   err.status = 404;
-//   next(err);
-// });
-
-// // production error handler
-// // no stacktraces leaked to user
-// app.use(function(err, req, res, next) {
-//   res.status(err.status || 500);
-//   res.sendFile(path.join(__dirname, rootDir, '404.html'), {
-//     message: err.message,
-//     error: {}
-//   });
-// });
-
 module.exports = app;
 
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3000');
+var port = _normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
 /**
  * Create HTTP server.
  */
-
 var server = app.listen(port);
 
-/**
- * Listen on provided port, on all network interfaces.
- */
 var messages = [],
-    users = [];
+    users = [],
+    userMap = {};
 
+/**
+ * Listen for socket connection
+ */
 var io = require('socket.io').listen(server);
 
 io.on('connection', function (socket) {
-  console.log('A user connected.');
+  console.log('A user connected. ID is ' + socket.id);
 
   socket.on('messages.read', function () {
     console.log('message reading');
@@ -112,22 +95,38 @@ io.on('connection', function (socket) {
   socket.on('channel.join', function (channel) {
     socket.join(channel); 
   });
+
+  socket.on('users.add', function (user, fn) {
+    console.log(user.name + ' has joined. user_id: ' + user.id);
+    console.log(user.id in userMap);
+    if (user.id && user.id in userMap) {
+      // If user has joined ever, update and then return the user_id in map  
+      users[userMap[user.id]] = user;
+      console.log(JSON.stringify(userMap));
+      fn(user);
+    } else {
+      // If user join first time, or user_id isn't in map yet, then generate a random number,
+      // then add it to the map
+      var randId = _pickId();
+      var userNew = {
+        name: user.name,
+        id: randId
+      };
+      users.push(userNew);
+      userMap[userNew.id] = users.length - 1;
+      console.log('not: ' + JSON.stringify(userMap));
+      fn(userNew);
+    }
+  });
 });
 
 server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
-
-/**
- * Listen for socket connection
- */
-
 
 /**
  * Normalize a port into a number, string, or false.
  */
 
-function normalizePort(val) {
+function _normalizePort(val) {
   var port = parseInt(val, 10);
 
   if (isNaN(port)) {
@@ -144,41 +143,13 @@ function normalizePort(val) {
 }
 
 /**
- * Event listener for HTTP server "error" event.
+ * Pick a random number to generate ID for user and channel.
+ * @return {[number]}
  */
-
-function onError(error) {
-  if (error.syscall !== 'listen') {
-    throw error;
+function _pickId() {
+  var number = (new Date).getTime();
+  for (var i = 0; i < 4; i++) {
+    number += (Math.floor(Math.random()*10)).toString();
   }
-
-  var bind = typeof port === 'string'
-    ? 'Pipe ' + port
-    : 'Port ' + port;
-
-  // handle specific listen errors with friendly messages
-  switch (error.code) {
-    case 'EACCES':
-      console.error(bind + ' requires elevated privileges');
-      process.exit(1);
-      break;
-    case 'EADDRINUSE':
-      console.error(bind + ' is already in use');
-      process.exit(1);
-      break;
-    default:
-      throw error;
-  }
-}
-
-/**
- * Event listener for HTTP server "listening" event.
- */
-
-function onListening() {
-  var addr = server.address();
-  var bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
-  debug('Listening on ' + bind);
+  return parseInt(number);
 }

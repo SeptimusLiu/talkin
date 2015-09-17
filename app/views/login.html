@@ -1,10 +1,15 @@
 <div class="login-wrapper">
-	<form name="loginForm" class="form-inline" ng-submit="loginCtrl.submit()" novalidate>
-	  <div class="form-group has-success has-feedback">
-	    <input type="text" class="form-control" id="nickname" name="nickname" placeholder="Enter a nickname" ng-model="loginCtrl.loginForm.nickname" ng-pattern="/[\w]+/" required>
-	    <span ng-show="loginCtrl.loginForm.nickname.$valid" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+	<form name="loginForm" class="form-inline" ng-submit="loginForm.$valid && loginCtrl.login()" novalidate>
+	  <div class="form-group" ng-class="{'has-success has-feedback': !loginForm.nickname.$error.pattern && !loginForm.nickname.$error.required}">
+	    <input type="text" class="form-control" id="nickname" name="nickname" placeholder="Enter a nickname" ng-model="loginCtrl.loginForm.nickname" nickname-validate required>
+	    <span ng-hide="loginForm.nickname.$error.pattern || loginForm.nickname.$error.required" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
 	  </div>
-	  <button class="btn btn-default">Pick me a name!</button>
+	  <button type="button" class="btn btn-default">Pick me a name!</button>
 	  <button type="submit" class="btn btn-primary">Let's talk</button>
+	  <div class="login-validate">
+		  <small class="text-danger" ng-show="(loginForm.nickname.$error.pattern || loginForm.nickname.$error.required) && loginForm.nickname.$dirty">
+		  	Nickname must contain character or underscore
+		  </small>
+	  </div>
 	</form>
 </div>
