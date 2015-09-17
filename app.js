@@ -103,7 +103,11 @@ io.on('connection', function (socket) {
    */
   socket.on('message:get', function (channelId, fn) {
     console.log('message reading');
-    fn(messages[channelId]);
+    var messageList = {
+      messages: messages[channelId],
+      channel_id: channelId
+    }
+    fn(messageList);
   });
 
   socket.on('message:send', function (packet) {
@@ -119,7 +123,11 @@ io.on('connection', function (socket) {
       if (!messages[packet.channel_id])
         messages[packet.channel_id] = [];
       messages[packet.channel_id].push(message);
-      io.sockets.emit('message:recv', message);
+      var messageItem = {
+        message: message,
+        channel_id: packet.channel_id
+      }
+      io.sockets.to(packet.channel_id).emit('message:recv', messageItem);
     }
   });
 

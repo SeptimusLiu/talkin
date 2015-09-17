@@ -18,31 +18,18 @@ define(['controllers/module'], function(controllers) {
 			{ name: 'User 2' }
 		];
 
-		messageService.recvMessage(function (message) {
-			vm.messages.push(message);
+		messageService.recvMessage(function (messageItem) {
+			vm.messages.push(messageItem.message);
 		});
-	
-		// socketService.on('message:read', function (messages) {
-		// 	vm.messages = messages;
-		// });
-
-		// socketService.on('message:add', function (message) {
-		// 	vm.messages.push(message);
-		// });
 		
 		vm.sendMessage = sendMessageFunc;
 		vm.openModal = openModalFunc;
 		vm.getMessages = getMessagesFunc;
 
-		getMessagesFunc();
-
-		function getMessagesFunc() {
-			var activeIndex = _getActiveTag(vm.channels);
-			if (activeIndex != -1 && vm.channels[activeIndex].id) {
-					messageService.getMessages(vm.channels[activeIndex].id).then(function (messages) {
-					vm.messages = messages ? messages : [];
-				});
-			}
+		function getMessagesFunc(channelId) {
+			messageService.getMessages(channelId).then(function (messageList) {
+				vm.messages = messageList.messages ? messageList.messages : [];
+			});
 		}
 
 		function sendMessageFunc() {
@@ -87,6 +74,8 @@ define(['controllers/module'], function(controllers) {
 				socketService.emit('channel:join', result, function (channel) {
 					if (channel && !_hasDupChannel(channel)) {
 						vm.channels.push(channel);
+						_setActiveTag(vm.channels, channel.id);
+						getMessagesFunc(channel.id);
 					}
 				});
 			}, function () {
@@ -102,6 +91,14 @@ define(['controllers/module'], function(controllers) {
 				}
 			});
 			return flag;
+		}
+
+		function _setActiveTag(tags, id) {
+			angular.forEach(tags, function(item) {
+				item.active = false;
+				if (item.id === id)
+					item.active = true;
+			});
 		}
 
 		function _getActiveTag(tags) {

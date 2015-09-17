@@ -6,7 +6,7 @@
       </accordion-heading>
       <tabset vertical="true" type="pills">
         <tab ng-repeat="channel in mainCtrl.channels"
-          heading="{{ channel.name }}" active="channel.active" ng-click="mainCtrl.getMessages()">
+          heading="{{ channel.name }}" active="channel.active" ng-click="mainCtrl.getMessages(channel.id)">
         </tab>
       </tabset>
       <div class="talkin-accordion-additem">
@@ -59,7 +59,8 @@
         </div>
         <div class="message-item-container">
           <div>
-            <span>{{ message.user_name }}</span><span>{{ message.time | date }}</span>
+            <b class="message-item-name">{{ message.user_name }}</b>
+            <span class="message-item-date">{{ message.time | date }}</span>
             <p class="message-item-content">{{ message.content }}</p>
           </div>
         </div>
