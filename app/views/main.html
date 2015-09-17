@@ -14,6 +14,25 @@
       </tabset>
     </accordion-group>
   <accordion>
+
+  <div class="talkin-bottom-controls">
+    <div class="talkin-usercard">
+      <div class="usercard-avatar">
+        <img src="/images/yeoman.png" height="80" width="80" alt="Your avatar">
+      </div>
+      <div class="usercard-desc">
+        <h4 class="usercard-name">{{ mainCtrl.user.name }}</h4>
+      </div>
+    </div>
+    <div class="message-input-box">
+      <div class="input-group input-group-lg">
+        <input type="text" class="form-control" placeholder="I wanna say..." ng-model="mainCtrl.message">
+        <span class="input-group-btn">
+          <button ng-click="mainCtrl.sendMessage()" class="btn btn-primary" type="button">SEND</button>
+        </span>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="talkin-message-panel">
@@ -21,7 +40,7 @@
     <ul class="message-flow-list">
       <li class="message-flow-list-item" ng-repeat="message in mainCtrl.messages track by $index">
         <div class="message-item-avatar">
-          <img src="/images/yeoman.png" height="60" width="60">
+          <img src="/images/yeoman.png" height="60" width="60" alt="User avater">
         </div>
         <div class="message-item-content">
           <div>
@@ -34,11 +53,3 @@
   </div>
 </div>
 
-<div class="message-input-box">
-  <div class="input-group">
-    <input type="text" class="form-control" placeholder="I wanna say..." ng-model="mainCtrl.message">
-    <span class="input-group-btn">
-      <button ng-click="mainCtrl.sendMessage()" class="btn btn-primary" type="button">SEND</button>
-    </span>
-  </div>
-</div>

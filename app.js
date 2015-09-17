@@ -8,7 +8,6 @@ var mongoose = require('mongoose');
 
 var debug = require('debug')('talkin:server');
 var http = require('http');
-
 // var routes = require('./server/routes/index');
 // var users = require('./server/routes/users');
 
@@ -30,21 +29,12 @@ var rootDir = '';
 app.set('env', 'development');
 // app.engine('html', require('ejs').renderFile);
 
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 // app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-// app.use(express.static(path.join(__dirname, 'public')));
-// app.use('/users', users);
 
-// error handlers
-
-// development error handler
-// will print stacktrace
 rootDir = app.get('env') === 'development' ? 'app' : 'dist';
-// app.set('views', __dirname + '/app'); 
 app.use(express.static(path.join(__dirname, rootDir)));
 
 app.get('/', function (req, res){
@@ -56,7 +46,6 @@ module.exports = app;
 /**
  * Get port from environment and store in Express.
  */
-
 var port = _normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 

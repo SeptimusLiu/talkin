@@ -3,13 +3,13 @@ define(['controllers/module'], function(controllers) {
 	mainControllerFunc.$inject = ['$scope', 'socketService', '$state', '$cookieStore', 'getUserPromise'];
 
 	function mainControllerFunc($scope, socketService, $state, $cookieStore, getUserPromise) {
-		if (!getUserPromise) {
-			console.log('Enter main');
+		var vm = this;
+		vm.user = {};
+		if (!(vm.user = getUserPromise)) {
 			$state.go('login');
 			return;
 		}
-
-		var vm = this;
+		
 		vm.messages = [];
 		vm.rooms = [
 			{ name: 'Room 1', active: true },
