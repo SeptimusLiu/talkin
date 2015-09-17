@@ -61,6 +61,8 @@
           <div>
             <b class="message-item-name">{{ message.user_name }}</b>
             <span class="message-item-date">{{ message.time | date }}</span>
+            <i tooltip="Remove" ng-if="message.user_id == $parent.mainCtrl.user.id" ng-click="mainCtrl.removeMessage(message.channel_id, message.id)" 
+            class="message-item-remove glyphicon glyphicon-remove"></i>
             <p class="message-item-content">{{ message.content }}</p>
           </div>
         </div>

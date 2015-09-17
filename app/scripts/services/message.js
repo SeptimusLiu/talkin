@@ -11,6 +11,10 @@ define(['services/module'], function (serviceModule) {
         /**
          * Start listening to incoming message
          */
+        listenMessage: function (callback) {
+          socketService.on('message:get', callback);
+        },
+
         recvMessage: function(callback) {
           socketService.on('message:recv', callback);
         },
@@ -26,6 +30,10 @@ define(['services/module'], function (serviceModule) {
 
         sendMessage: function (packet) {
           socketService.emit('message:send', packet);
+        },
+
+        removeMessage: function (packet) {
+          socketService.emit('message:remove', packet);
         }
       };
 

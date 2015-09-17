@@ -12,11 +12,14 @@ define(['controllers/module'], function(controllers) {
 		
 		vm.messages =[];
 	 	vm.channels = [];
-	 	vm.channelsAll = [];
 	 	vm.whisperers = [
 			{ name: 'User 1', active: true },
 			{ name: 'User 2' }
 		];
+
+		messageService.listenMessage(function (messageList) {
+			_updateMessageList(messageList);
+		});
 
 		messageService.recvMessage(function (messageItem) {
 			if (messageItem) {
@@ -24,22 +27,17 @@ define(['controllers/module'], function(controllers) {
 				if (index == _getActiveTag(vm.channels)) {
 					vm.messages.push(messageItem.message);
 				}
-			}
-			
+			}			
 		});
 		
 		vm.sendMessage = sendMessageFunc;
 		vm.openModal = openModalFunc;
 		vm.getMessages = getMessagesFunc;
+		vm.removeMessage = removeMessageFunc;
 
 		function getMessagesFunc(channelId) {
 			messageService.getMessages(channelId).then(function (messageList) {
-				if (messageList) {
-					var index = _getTagIndexById(vm.channels, messageList.channel_id);
-					if (index == _getActiveTag(vm.channels)) {
-						vm.messages = messageList.messages ? messageList.messages : [];
-					}
-				}
+				_updateMessageList(messageList);
 			});
 		}
 
@@ -59,6 +57,14 @@ define(['controllers/module'], function(controllers) {
 			} else {
 				alert('Please choose a channel first.');
 			}
+		}
+
+		function removeMessageFunc(channelId, messsageId) {
+			var packet = {
+				channel_id:  vm.channels[_getActiveTag(vm.channels)].id,
+				message_id: messsageId
+			};
+			messageService.removeMessage(packet);
 		}
 
 		/**
@@ -92,6 +98,15 @@ define(['controllers/module'], function(controllers) {
 			}, function () {
 
 			});
+		}
+
+		function _updateMessageList(messageList) {
+			if (messageList) {
+				var index = _getTagIndexById(vm.channels, messageList.channel_id);
+				if (index == _getActiveTag(vm.channels)) {
+					vm.messages = messageList.messages ? messageList.messages : [];
+				}
+			}
 		}
 
 		function _hasDupChannel(channelItem) {

@@ -57,6 +57,7 @@ var server = app.listen(port);
 /**
  * messages(Array) structure:
  * @channel_id : {
+ *  @id {Number}
  *  @user_id {Number}
  *  @user_name {String}
  *  @content {String}
@@ -106,15 +107,16 @@ io.on('connection', function (socket) {
     var messageList = {
       messages: messages[channelId],
       channel_id: channelId
-    }
+    };
     fn(messageList);
   });
 
   socket.on('message:send', function (packet) {
     console.log('message sent');
-    if (packet.channel_id in channels) {
+    if (packet && packet.channel_id in channels) {
       console.log(packet.channel_id);
       var message = {
+        id: _pickId(),
         user_id: packet.user_id,
         user_name: packet.user_name,
         content: packet.content,
@@ -131,6 +133,24 @@ io.on('connection', function (socket) {
     }
   });
 
+  socket.on('message:remove', function (packet) {
+    if (packet && packet.message_id && packet.channel_id in channels) {
+      console.log('deleteing');
+      var index = -1;
+      messages[packet.channel_id].forEach(function (message, i) {
+        if (message.id === packet.message_id) {
+          index = i;
+        }
+      });
+      if (index !== -1)
+        messages[packet.channel_id].splice(index, 1);
+      var messageList = {
+        messages: messages[packet.channel_id],
+        channel_id: packet.channel_id
+      };
+      io.sockets.to(packet.channel_id).emit('message:get', messageList);
+    }
+  });
   
   /**
    * Channel events
