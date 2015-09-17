@@ -114,6 +114,7 @@ html, body, main {
 .message-item-avatar {
   display: inline-block;
   width: 10%;
+  min-width: 80px;
   vertical-align: top;
 }
 
