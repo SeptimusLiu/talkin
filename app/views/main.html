@@ -15,7 +15,7 @@
       </div>
     </accordion-group>
 
-    <accordion-group ng-init="mainCtrl.privateIsOpen = true" is-open="mainCtrl.privateIsOpen">
+    <!-- <accordion-group ng-init="mainCtrl.privateIsOpen = true" is-open="mainCtrl.privateIsOpen">
       <accordion-heading>
         Private Messages<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': mainCtrl.privateIsOpen, 'glyphicon-chevron-right': !mainCtrl.privateIsOpen}"></i>
       </accordion-heading>
@@ -28,12 +28,12 @@
         <span popover-placement="right" popover="add channel" class="margin-left">Say to someone</span>
       </div>
     </accordion-group>
-  <accordion>
+  <accordion> -->
 
   <div class="talkin-bottom-controls">
     <div class="talkin-usercard">
       <div class="usercard-avatar">
-        <img src="/images/yeoman.png" height="80" width="80" alt="Your avatar">
+        <img ng-src="/images/avatar_{{ mainCtrl.user.avatar_id || 0 }}.jpg" height="60" width="60" alt="Your avatar">
       </div>
       <div class="usercard-desc">
         <h4 class="usercard-name">{{ mainCtrl.user.name }}</h4>
@@ -55,13 +55,13 @@
     <ul class="message-flow-list">
       <li class="message-flow-list-item" ng-repeat="message in mainCtrl.messages track by $index">
         <div class="message-item-avatar">
-          <img src="/images/yeoman.png" height="60" width="60" alt="User avater">
+          <img ng-src="/images/avatar_{{ message.avatar_id }}.jpg" height="60" width="60" alt="User avatar">
         </div>
         <div class="message-item-container">
           <div>
             <b class="message-item-name">{{ message.user_name }}</b>
             <span class="message-item-date">{{ message.time | date }}</span>
-            <i tooltip="Remove" ng-if="message.user_id == $parent.mainCtrl.user.id" ng-click="mainCtrl.removeMessage(message.channel_id, message.id)" 
+            <i tooltip="Remove" tooltip-placement="bottom" ng-if="message.user_id == $parent.mainCtrl.user.id" ng-click="mainCtrl.removeMessage(message.channel_id, message.id)" 
             class="message-item-remove glyphicon glyphicon-remove"></i>
             <p class="message-item-content">{{ message.content }}</p>
           </div>

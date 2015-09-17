@@ -17,6 +17,14 @@ define(['controllers/module'], function(controllers) {
 			{ name: 'User 2' }
 		];
 
+		vm.sendMessage = sendMessageFunc;
+		vm.openModal = openModalFunc;
+		vm.getMessages = getMessagesFunc;
+		vm.removeMessage = removeMessageFunc;
+
+		/**
+		 * Add a listener for message removing event.
+		 */
 		messageService.listenMessage(function (messageList) {
 			_updateMessageList(messageList);
 		});
@@ -29,11 +37,6 @@ define(['controllers/module'], function(controllers) {
 				}
 			}			
 		});
-		
-		vm.sendMessage = sendMessageFunc;
-		vm.openModal = openModalFunc;
-		vm.getMessages = getMessagesFunc;
-		vm.removeMessage = removeMessageFunc;
 
 		function getMessagesFunc(channelId) {
 			messageService.getMessages(channelId).then(function (messageList) {

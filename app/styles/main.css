@@ -149,7 +149,7 @@ html, body, main {
   vertical-align: middle;
 }
 
-.login-wrapper .form-inline {
+.login-container {
   position: relative;
   display: inline-block;
   vertical-align: middle;
@@ -225,6 +225,35 @@ html, body, main {
 
 .textarea-fixed {
   resize: none;
+}
+
+/* Avatar picker in login page */
+.avatar-picker-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 80px;
+  height: 80px;
+  margin-bottom: 15px;
+  vertical-align: middle;
+}
+
+.avatar-picker-box {
+  position: absolute;
+  top: -80px;
+  left: -80px;
+  width: 240px;
+  height: 240px;
+  z-index: 999;
+}
+
+.avatar-picker-box > ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.avatar-picker-box > ul > li {
+  float: left;
+  width: 80px;
 }
 
 /* Responsive: Portrait tablets and up */

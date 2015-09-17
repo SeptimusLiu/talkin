@@ -115,9 +115,15 @@ io.on('connection', function (socket) {
     console.log('message sent');
     if (packet && packet.channel_id in channels) {
       console.log(packet.channel_id);
+      var avatarId = 0;
+      if (packet.user_id in userMap) {
+        avatarId = users[userMap[packet.user_id]].avatar_id;
+      }
+      console.log(avatarId);
       var message = {
         id: _pickId(),
         user_id: packet.user_id,
+        avatar_id: avatarId,
         user_name: packet.user_name,
         content: packet.content,
         time: new Date()
@@ -201,7 +207,8 @@ io.on('connection', function (socket) {
       var randId = _pickId();
       userItem = {
         name: user.name,
-        id: randId
+        id: randId,
+        avatar_id: user.avatar_id
       };
       users.push(userItem);
       userMap[userItem.id] = users.length - 1;

@@ -1,0 +1,13 @@
+<div class="avatar-picker-wrapper">
+	<div ng-click="status.isOpen = true">
+		<img src="/images/avatar_{{ picked }}.jpg" alt="Avatar" height="80" width="80">
+	</div>
+
+	<div ng-show="status.isOpen" class="avatar-picker-box">
+		<ul>
+			<li ng-repeat="img in items" ng-click="status.isOpen = false; $parent.picked = $index">
+				<img ng-src="/images/avatar_{{ img }}.jpg" alt="Choose avatar" height="80" width="80">
+			</li>
+		</ul>
+	</div>
+</div>

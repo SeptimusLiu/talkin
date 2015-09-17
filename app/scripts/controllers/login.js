@@ -4,6 +4,7 @@ define(['controllers/module'], function(controllers) {
 
 	function loginControllerFunc($scope, $state, $cookieStore, loginService) {
 		var vm = this;
+		vm.picked = 0;
 		vm.loginForm = {};
 
 		vm.login = function () {
@@ -14,7 +15,8 @@ define(['controllers/module'], function(controllers) {
 			}
 			var user = {
 				name: vm.loginForm.nickname,
-				id: user_id
+				id: user_id,
+				avatar_id: vm.picked
 			};
 			loginService.addUser(user).then(function (userItem) {
 				console.log(userItem);
