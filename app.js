@@ -58,6 +58,7 @@ var server = app.listen(port);
  * messages(Array) structure:
  * @channel_id : {
  *  @user_id {Number}
+ *  @user_name {String}
  *  @content {String}
  *  @time {Date}
  * }
@@ -100,15 +101,26 @@ io.on('connection', function (socket) {
   /**
    * Message events
    */
-  socket.on('messages:read', function () {
+  socket.on('message:get', function (channelId, fn) {
     console.log('message reading');
-    socket.emit('messages:read', messages);
+    fn(messages[channelId]);
   });
 
-  socket.on('messages:create', function (message) {
-    console.log('message created');
-    messages.push(message);
-    io.sockets.emit('messages:add', message);
+  socket.on('message:send', function (packet) {
+    console.log('message sent');
+    if (packet.channel_id in channels) {
+      console.log(packet.channel_id);
+      var message = {
+        user_id: packet.user_id,
+        user_name: packet.user_name,
+        content: packet.content,
+        time: new Date()
+      };
+      if (!messages[packet.channel_id])
+        messages[packet.channel_id] = [];
+      messages[packet.channel_id].push(message);
+      io.sockets.emit('message:recv', message);
+    }
   });
 
   
@@ -167,7 +179,7 @@ io.on('connection', function (socket) {
       userMap[userItem.id] = users.length - 1;
       console.log('not: ' + JSON.stringify(userMap));
       // Let the user join the default channel
-      socket.join(squareId);
+      // socket.join(squareId);
     }
     userItem['last_login_time'] = new Date();
     fn(userItem);

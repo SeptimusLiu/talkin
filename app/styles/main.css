@@ -101,10 +101,14 @@ html, body, main {
   margin-bottom: 15px;
 }
 
-.message-item-content {
+.message-item-container {
   display: inline-block;
   width: 80%;
   vertical-align: top;
+}
+
+.message-item-content {
+  white-space: pre-line;
 }
 
 .message-item-avatar {
@@ -203,6 +207,10 @@ html, body, main {
   padding-left: 0;
   margin-bottom: 0;
   list-style: none;
+}
+
+.textarea-fixed {
+  resize: none;
 }
 
 /* Responsive: Portrait tablets and up */

@@ -6,7 +6,7 @@
       </accordion-heading>
       <tabset vertical="true" type="pills">
         <tab ng-repeat="channel in mainCtrl.channels"
-          heading="{{ channel.name }}" active="channel.active">
+          heading="{{ channel.name }}" active="channel.active" ng-click="mainCtrl.getMessages()">
         </tab>
       </tabset>
       <div class="talkin-accordion-additem">
@@ -41,7 +41,7 @@
     </div>
     <div class="message-input-box">
       <div class="input-group input-group-lg">
-        <input type="text" class="form-control" placeholder="I wanna say..." ng-model="mainCtrl.message">
+        <textarea rows="1" class="form-control textarea-fixed" placeholder="I wanna say..." ng-model="mainCtrl.message"></textarea>
         <span class="input-group-btn">
           <button ng-click="mainCtrl.sendMessage()" class="btn btn-primary" type="button">SEND</button>
         </span>
@@ -57,10 +57,10 @@
         <div class="message-item-avatar">
           <img src="/images/yeoman.png" height="60" width="60" alt="User avater">
         </div>
-        <div class="message-item-content">
+        <div class="message-item-container">
           <div>
-            <span>Name</span><span>10:30 PM</span>
-            <p>{{ message }}</p>
+            <span>{{ message.user_name }}</span><span>{{ message.time | date }}</span>
+            <p class="message-item-content">{{ message.content }}</p>
           </div>
         </div>
       </li>

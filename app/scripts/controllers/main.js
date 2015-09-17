@@ -1,8 +1,8 @@
 define(['controllers/module'], function(controllers) {
 	controllers.controller('mainController', mainControllerFunc);
-	mainControllerFunc.$inject = ['$scope', '$q', 'channelService', 'socketService', '$state', '$cookieStore', '$modal', 'getUserPromise'];
+	mainControllerFunc.$inject = ['$scope', '$q', 'channelService', 'socketService', 'messageService', '$state', '$cookieStore', '$modal', 'getUserPromise'];
 
-	function mainControllerFunc($scope, $q, channelService, socketService, $state, $cookieStore, $modal, getUserPromise) {
+	function mainControllerFunc($scope, $q, channelService, socketService, messageService, $state, $cookieStore, $modal, getUserPromise) {
 		var vm = this;
 		vm.user = {};
 		if (!(vm.user = getUserPromise)) {
@@ -13,35 +13,54 @@ define(['controllers/module'], function(controllers) {
 		vm.messages =[];
 	 	vm.channels = [];
 	 	vm.channelsAll = [];
-		vm.whisperers = [
+	 	vm.whisperers = [
 			{ name: 'User 1', active: true },
 			{ name: 'User 2' }
-		]
+		];
 
-		socketService.on('message:read', function (messages) {
-			vm.messages = messages;
-		});
-
-		socketService.on('message:add', function (message) {
+		messageService.recvMessage(function (message) {
 			vm.messages.push(message);
 		});
+	
+		// socketService.on('message:read', function (messages) {
+		// 	vm.messages = messages;
+		// });
 
-		socketService.on('channel:get', function (channels) {
-			angular.forEach(channels, function(v, k) {
-				vm.channelsAll.push({ id: k, name: v });
-			});
-		});
-
-		socketService.emit('message:read');
+		// socketService.on('message:add', function (message) {
+		// 	vm.messages.push(message);
+		// });
 		
-
 		vm.sendMessage = sendMessageFunc;
-
 		vm.openModal = openModalFunc;
+		vm.getMessages = getMessagesFunc;
+
+		getMessagesFunc();
+
+		function getMessagesFunc() {
+			var activeIndex = _getActiveTag(vm.channels);
+			if (activeIndex != -1 && vm.channels[activeIndex].id) {
+					messageService.getMessages(vm.channels[activeIndex].id).then(function (messages) {
+					vm.messages = messages ? messages : [];
+				});
+			}
+		}
 
 		function sendMessageFunc() {
-			socketService.emit('message:send', vm.message);
-			vm.message = '';
+			// Construct message packet.
+			// TODO: Validate each field value.
+			var activeIndex = _getActiveTag(vm.channels);
+			if (activeIndex != -1 && vm.channels[activeIndex].id) {
+				var packet = {
+					channel_id: vm.channels[activeIndex].id,
+					user_id: vm.user.id,
+					user_name: vm.user.name,
+					content: vm.message
+				};
+				messageService.sendMessage(packet);
+				vm.message = '';
+			} else {
+				alert('Please choose a channel first.');
+			}
 		}
 
 		/**
@@ -53,6 +72,7 @@ define(['controllers/module'], function(controllers) {
 				templateUrl: '/scripts/partial/' + modalName + '.html',
 				controller: 'modalController',
 				resolve: {
+					// Get channel list before modal open.
 					channels: function () {
 						return channelService.getChannels()
 							.then(function (channels) {
@@ -82,6 +102,15 @@ define(['controllers/module'], function(controllers) {
 				}
 			});
 			return flag;
+		}
+
+		function _getActiveTag(tags) {
+			var activeIndex = -1;
+			angular.forEach(tags, function(item, index) {
+				if (item.active)
+					activeIndex = index;
+			});
+			return activeIndex;
 		}
 	}
 })
