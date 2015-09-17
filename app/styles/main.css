@@ -87,11 +87,10 @@ html, body, main {
   overflow: auto;
 }
 
+/* Message item in main panel */
 .message-flow {
   position: relative;
   padding-top: 15px;
-/*  padding-left: 20px;
-  padding-right: 20px; */
 }
 
 .message-flow-list {
@@ -114,6 +113,7 @@ html, body, main {
   vertical-align: top;
 }
 
+/* Login page */
 .login-container {
   display: table;
   margin: auto;
@@ -157,6 +157,10 @@ html, body, main {
   background-color: #337ab7;
 }
 
+.talkin-usercard:hover {
+  background-color: #62AAE8;
+}
+
 .usercard-avatar {
   float: left;
   width: 80px;
@@ -169,8 +173,10 @@ html, body, main {
 }
 
 .usercard-name {
+  margin-top: 0;
   color: #fff;
-  line-height: 2;
+  line-height: 3.2;
+  cursor: default;
 }
 
 .message-input-box {
@@ -183,8 +189,20 @@ html, body, main {
   background-color: #337ab7;
 }
 
-.message-input-box .form-control,
-.message-input-box .btn {
+/* Widgets in sidebar */
+.talkin-accordion-additem {
+  padding: 6px 12px;
+  color: #aaa;
+}
+
+.talkin-accordion-additem span {
+  margin-left: 6px;
+}
+
+.talkin-option-wrapper ul {
+  padding-left: 0;
+  margin-bottom: 0;
+  list-style: none;
 }
 
 /* Responsive: Portrait tablets and up */

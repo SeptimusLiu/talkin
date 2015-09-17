@@ -11,7 +11,7 @@ define(['services/module'], function (serviceModule) {
           var deferred = $q.defer();
           if (user) {
             // Send user info to server, if it existed, update it, or add a new one.
-            socketService.emit('users.add', user, function (userItem) {
+            socketService.emit('user:add', user, function (userItem) {
               // Fetch user info from server, and save it to cookie/
               $cookieStore.put('user', userItem);
               deferred.resolve();
@@ -29,7 +29,7 @@ define(['services/module'], function (serviceModule) {
           var user = $cookieStore.get('user');
           if (user) {
             // Send user info saved in cookie, if it doesn't exist in server, then add it/
-            socketService.emit('users.add', user, function (userItem) {
+            socketService.emit('user:add', user, function (userItem) {
               $cookieStore.put('user', userItem);
               deferred.resolve(userItem); // Send user info to main controller.
             });

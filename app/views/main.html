@@ -1,17 +1,32 @@
 <div class="talkin-sidebar">
   <accordion close-others="false">
-    <accordion-group heading="Rooms" is-open="true">
-      <tabset vertical="true" type="'pills'">
-        <tab ng-repeat="room in mainCtrl.rooms"
-        heading="{{ room.name }}" active="room.active"></tab>
+    <accordion-group ng-init="mainCtrl.channelsIsOpen = true" is-open="mainCtrl.channelsIsOpen">
+      <accordion-heading>
+        Channels<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': mainCtrl.channelsIsOpen, 'glyphicon-chevron-right': !mainCtrl.channelsIsOpen}"></i>
+      </accordion-heading>
+      <tabset vertical="true" type="pills">
+        <tab ng-repeat="channel in mainCtrl.channels"
+          heading="{{ channel.name }}" active="channel.active">
+        </tab>
       </tabset>
+      <div class="talkin-accordion-additem">
+        <i class="pull-left glyphicon glyphicon-plus"></i>
+        <span popover-placement="right" popover-template="'/scripts/partial/channelOps.html'" class="margin-left">Add a channel</span>
+      </div>
     </accordion-group>
 
-    <accordion-group heading="Private Messages" is-open="true">
-      <tabset vertical="true" type="'pills'">
-        <tab ng-repeat="whisperer in mainCtrl.whisperers"
+    <accordion-group ng-init="mainCtrl.privateIsOpen = true" is-open="mainCtrl.privateIsOpen">
+      <accordion-heading>
+        Private Messages<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': mainCtrl.privateIsOpen, 'glyphicon-chevron-right': !mainCtrl.privateIsOpen}"></i>
+      </accordion-heading>
+      <tabset vertical="true" type="pills">
+        <tab ng-repeat="whisperer in mainCtrl.whisperers track by $index"
         heading="{{ whisperer.name }}" active="whisperer.active"></tab>
       </tabset>
+      <div class="talkin-accordion-additem">
+        <i class="pull-left glyphicon glyphicon-plus"></i>
+        <span popover-placement="right" popover="add channel" class="margin-left">Say to someone</span>
+      </div>
     </accordion-group>
   <accordion>
 

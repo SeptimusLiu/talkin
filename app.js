@@ -54,9 +54,36 @@ app.set('port', port);
  */
 var server = app.listen(port);
 
-var messages = [],
-    users = [],
+/**
+ * messages(Array) structure:
+ * @channel_id : {
+ *  @user_id {Number}
+ *  @content {String}
+ *  @time {Date}
+ * }
+ */
+var messages = {};
+
+/**
+ * channels(Object) structure:
+ * @id {Number}
+ * @name {String}
+ */
+var squareId = _pickId();
+var channels = {};
+channels[squareId] = 'Square'; // Default channel
+
+/**
+ * users(Array) structures:
+ * @id {Number}
+ * @name {String}
+ * @last_login_time {Date}
+ */
+
+// TODO: Free users after long time not login
+var users = [],
     userMap = {};
+
 
 /**
  * Listen for socket connection
@@ -66,46 +93,84 @@ var io = require('socket.io').listen(server);
 io.on('connection', function (socket) {
   console.log('A user connected. ID is ' + socket.id);
 
-  socket.on('messages.read', function () {
-    console.log('message reading');
-    socket.emit('messages.read', messages);
-  });
-
-  socket.on('messages.create', function (message) {
-    console.log('message created');
-    messages.push(message);
-    io.sockets.emit('messages.add', message);
-  });
-
   socket.on('disconnect', function () {
     console.log('A user disconnected.');
   });
-  
-  socket.on('channel.join', function (channel) {
-    socket.join(channel); 
+
+  /**
+   * Message events
+   */
+  socket.on('messages:read', function () {
+    console.log('message reading');
+    socket.emit('messages:read', messages);
   });
 
-  socket.on('users.add', function (user, fn) {
+  socket.on('messages:create', function (message) {
+    console.log('message created');
+    messages.push(message);
+    io.sockets.emit('messages:add', message);
+  });
+
+  
+  /**
+   * Channel events
+   */
+  socket.on('channel:get', function (channel, fn) {
+    console.log('channel getting');
+    // socket.emit('channel:get', channels); 
+    fn(channels);
+  });
+
+
+  socket.on('channel:join', function (channel, fn) {
+    console.log('A user joined channel ' + channel.id);
+    var channelItem = {};
+    if (channel.id && channel.id in channels) {
+      // If a valid channel id provided, then join it.
+      console.log(JSON.stringify(channels));
+      channel.name = channels[channel.id];
+      channelItem = channel;
+    } else {
+      // Otherwise generate a new channel.
+      var randId = _pickId();
+      channelItem = {
+        name: channel.name,
+        id: randId
+      };
+      console.log('not:' + JSON.stringify(channels));
+      channels[channelItem.id] = channelItem.name;
+    }
+    socket.join(channelItem.id);
+    fn(channelItem);
+  });
+
+  /**
+   * User events
+   */
+  socket.on('user:add', function (user, fn) {
     console.log(user.name + ' has joined. user_id: ' + user.id);
-    console.log(user.id in userMap);
+    var userItem = {};
     if (user.id && user.id in userMap) {
       // If user has joined ever, update and then return the user_id in map  
       users[userMap[user.id]] = user;
       console.log(JSON.stringify(userMap));
-      fn(user);
+      userItem = user;
     } else {
       // If user join first time, or user_id isn't in map yet, then generate a random number,
       // then add it to the map
       var randId = _pickId();
-      var userNew = {
+      userItem = {
         name: user.name,
         id: randId
       };
-      users.push(userNew);
-      userMap[userNew.id] = users.length - 1;
+      users.push(userItem);
+      userMap[userItem.id] = users.length - 1;
       console.log('not: ' + JSON.stringify(userMap));
-      fn(userNew);
+      // Let the user join the default channel
+      socket.join(squareId);
     }
+    userItem['last_login_time'] = new Date();
+    fn(userItem);
   });
 });
 
@@ -136,7 +201,7 @@ function _normalizePort(val) {
  * @return {[number]}
  */
 function _pickId() {
-  var number = (new Date).getTime();
+  var number = (new Date()).getTime();
   for (var i = 0; i < 4; i++) {
     number += (Math.floor(Math.random()*10)).toString();
   }

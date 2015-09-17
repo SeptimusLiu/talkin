@@ -1,0 +1,17 @@
+<div>
+    <div class="modal-header">
+        <h3 class="modal-title">Join a channel</h3>
+    </div>
+    <div class="modal-body">
+        <div class="container">
+            <ul>
+                <li ng-repeat="channel in channels">
+                    <a ng-click="confirm(channel.id)" href="javascript:;">{{ channel.name }}</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+    </div>
+</div>

@@ -1,0 +1,20 @@
+<div>
+    <div class="modal-header">
+        <h3 class="modal-title">Create a channel</h3>
+    </div>
+    <div class="modal-body">
+    <div class="form-horizontal">
+        <div class="form-group">
+            <label for="channelName" class="col-sm-3 control-label">Channel name</label>
+                <div class="col-sm-9">
+                  <input type="text" class="form-control" id="channelName" ng-model="channelName" 
+                  placeholder="Enter a name for your channel" required>
+                </div>
+          </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="button" ng-click="confirm()">OK</button>
+        <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+    </div>
+</div>

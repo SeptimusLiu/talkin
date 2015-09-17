@@ -1,5 +1,5 @@
 define([
-	'./module','./socket','./login'
+	'./module','./socket','./login','./channel'
 ],function(){
 	
 })
