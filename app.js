@@ -5,29 +5,12 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
-
 var debug = require('debug')('talkin:server');
 var http = require('http');
-// var routes = require('./server/routes/index');
-// var users = require('./server/routes/users');
 
 var app = express();
 var rootDir = '';
-
-// connect to mongodb
-// mongoose.connect('mongodb://localhost/talkin', function (err) {
-//     if(err) {
-//         console.log('connection error', err);
-//     } else {
-//         console.log('connection successful');
-//     }
-// });
-
-// view engine setup
-// app.set('views', path.join(__dirname, 'views'));
-// app.set('view engine', 'ejs');
 app.set('env', 'development');
-// app.engine('html', require('ejs').renderFile);
 
 // app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -38,7 +21,7 @@ rootDir = app.get('env') === 'development' ? 'app' : 'dist';
 app.use(express.static(path.join(__dirname, rootDir)));
 
 app.get('/', function (req, res){
-  res.sendFile(path.join(__dirname, rootDir, ' index.html'));
+  res.sendFile(path.join(__dirname, rootDir, '../index.html'));
 });
 
 module.exports = app;

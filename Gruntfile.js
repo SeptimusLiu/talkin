@@ -128,7 +128,7 @@ module.exports = function (grunt) {
       },
       livereload: {
         options: {
-          server: path.resolve('./app'),
+          server: path.resolve('./server/index'),
           livereload: true,
           serverreload: false,
           bases: [path.resolve('./.tmp'), path.resolve(__dirname, appConfig.app)]
@@ -136,13 +136,13 @@ module.exports = function (grunt) {
       },
       test: {
         options: {
-          server: path.resolve('./app'),
+          server: path.resolve('./server/index'),
           bases: [path.resolve('./.tmp'), path.resolve(__dirname, 'test')]
         }
       },
       dist: {
         options: {
-          server: path.resolve('./app'),
+          server: path.resolve('./server/index'),
           bases: path.resolve(__dirname, appConfig.dist)
         }
       }
@@ -488,8 +488,9 @@ module.exports = function (grunt) {
   ]);
 
   grunt.registerTask('default', [
-    'newer:jshint',
-    'test',
-    'build'
+    // 'newer:jshint',
+    // 'test',
+    // 'build'
+    'serve'
   ]);
 };
