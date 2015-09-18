@@ -24,7 +24,7 @@ function Message(option) {
 }
 
 function User(option) {
-	this.id = option.id || utils.pickId();;
+	this.id = option.id || utils.pickId();
 	this.name = option.name;
 	this.avatar_id = option.avatar_id || 0;
 }

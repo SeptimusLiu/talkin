@@ -69,6 +69,7 @@ channels[squareId] = 'Square'; // Default channel
 
 // TODO: Free users after long time not login
 var users = [],
+    onlineUsers = {},
     userMap = {};
 
 
@@ -82,6 +83,11 @@ io.on('connection', function (socket) {
 
   socket.on('disconnect', function () {
     console.log('A user disconnected.');
+    try {
+      disconnect(socket);
+    } catch (e) {
+      console.log(e);
+    }
   });
 
   /**
@@ -92,11 +98,19 @@ io.on('connection', function (socket) {
   });
 
   socket.on('message:send', function (packet) {
-    sendMessage(packet);
+    try {
+      sendMessage(packet);
+    } catch (e) {
+      console.log(e);
+    }   
   });
 
   socket.on('message:remove', function (packet) {
-    removeMessage(packet);
+    try {
+      removeMessage(packet);
+    } catch (e) {
+      console.log(e);
+    }
   });
   
   /**
@@ -108,20 +122,40 @@ io.on('connection', function (socket) {
 
 
   socket.on('channel:join', function (channel, fn) {
-    joinChannel(channel, fn, socket);
+    try {
+      joinChannel(channel, fn, socket);
+    } catch (e) {
+      console.log(e);
+    }
   });
 
   /**
    * User events
    */
   socket.on('user:add', function (user, fn) {
-    addUser(user, fn, socket);
+    try {
+      addUser(user, fn, socket);
+    } catch (e) {
+      console.log(e);
+    }
+  });
+
+  socket.on('user:get', function (user, fn) {
+    try {
+      getUser(user, fn, socket);
+    } catch (e) {
+      console.log(e);
+    }
   });
 });
 
 server.listen(port);
 
 /* Sockets processing functions */
+
+/**
+ * Message operations
+ */
 
 function getMessage(channelId, fn, socket) {
   console.log('message reading');
@@ -173,6 +207,10 @@ function removeMessage(packet) {
     }
 }
 
+/**
+ * Channel operations
+ */
+
 function getChannel(channel, fn, socket) {
   console.log('channel getting');
   // socket.emit('channel:get', channels); 
@@ -201,11 +239,16 @@ function joinChannel(channel, fn, socket) {
     fn.call(socket, channelItem);
 }
 
+
+/**
+ * User operations
+ */
+
 function addUser(user, fn, socket) {
   console.log(user.name + ' has joined. user_id: ' + user.id);
   var userItem = {};
   if (user.id && user.id in userMap) {
-    // If user has joined ever, update and then return the user_id in map  
+    // If user has joined ever, update and then return the user_id in map     
     users[userMap[user.id]] = user;
     console.log(JSON.stringify(userMap));
     userItem = user;
@@ -214,19 +257,40 @@ function addUser(user, fn, socket) {
     // then add it to the map
     // var randId = utils.pickId();
     userItem = protocols.user.construct(user);
-    // userItem = {
-    //   name: user.name,
-    //   id: randId,
-    //   avatar_id: user.avatar_id
-    // };
     users.push(userItem);
+
     userMap[userItem.id] = users.length - 1;
-    console.log('not: ' + JSON.stringify(userMap));
     // Let the user join the default channel
     // socket.join(squareId);
   }
   userItem['last_login_time'] = new Date();
+
+  if (!(socket.id in onlineUsers)) {
+    onlineUsers[socket.id] = userItem.id;
+  }
+  io.sockets.emit('user:get', getOnlineUsers());
   fn.call(socket, userItem);
+}
+
+function getUser(user, fn, socket) {
+  console.log('getting users ' + JSON.stringify(onlineUsers));
+  fn.call(socket, getOnlineUsers());
+}
+
+function disconnect(socket) {
+  delete onlineUsers[socket.id];
+  io.sockets.emit('user:get', getOnlineUsers());
+}
+
+function getOnlineUsers() {
+  var userList = [];
+  for (var user in onlineUsers) {
+    if (onlineUsers[user] in userMap) {
+      var userIndex = userMap[onlineUsers[user]];
+      userList.push(users[userIndex]);
+    }
+  }
+  return userList;
 }
 
 /**

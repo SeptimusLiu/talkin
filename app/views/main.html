@@ -15,29 +15,38 @@
       </div>
     </accordion-group>
 
-    <!-- <accordion-group ng-init="mainCtrl.privateIsOpen = true" is-open="mainCtrl.privateIsOpen">
+    <accordion-group ng-init="mainCtrl.privateIsOpen = true" is-open="mainCtrl.privateIsOpen">
       <accordion-heading>
-        Private Messages<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': mainCtrl.privateIsOpen, 'glyphicon-chevron-right': !mainCtrl.privateIsOpen}"></i>
+        Online Users<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': mainCtrl.privateIsOpen, 'glyphicon-chevron-right': !mainCtrl.privateIsOpen}"></i>
       </accordion-heading>
-      <tabset vertical="true" type="pills">
-        <tab ng-repeat="whisperer in mainCtrl.whisperers track by $index"
-        heading="{{ whisperer.name }}" active="whisperer.active"></tab>
-      </tabset>
+      <ul class="onlineuser-list">
+        <li class="clearfix" ng-repeat="user in mainCtrl.users track by $index">
+          <a href="#">
+          <div class="onlineuser-list-avatar">
+            <img ng-src="/images/avatar_{{ user.avatar_id }}.jpg" height="50" width="50">
+          </div>
+          <h5 class="onlineuser-list-name">{{ user.name }}</h5>
+          </a>
+        </li>
+      </ul>
       <div class="talkin-accordion-additem">
         <i class="pull-left glyphicon glyphicon-plus"></i>
         <span popover-placement="right" popover="add channel" class="margin-left">Say to someone</span>
       </div>
     </accordion-group>
-  <accordion> -->
+  <accordion>
 
+  <!-- User card START -->
   <div class="talkin-bottom-controls">
     <div class="talkin-usercard">
-      <div class="usercard-avatar">
-        <img ng-src="/images/avatar_{{ mainCtrl.user.avatar_id || 0 }}.jpg" height="60" width="60" alt="Your avatar">
-      </div>
-      <div class="usercard-desc">
-        <h4 class="usercard-name">{{ mainCtrl.user.name }}</h4>
-      </div>
+      <a tooltip="Go to change a name" ui-sref="login()">
+        <div class="usercard-avatar">
+          <img ng-src="/images/avatar_{{ mainCtrl.user.avatar_id || 0 }}.jpg" height="60" width="60" alt="Your avatar">
+        </div>
+        <div class="usercard-desc">
+          <h4 class="usercard-name">{{ mainCtrl.user.name }}</h4>
+        </div>
+      </a>
     </div>
     <div class="message-input-box">
       <div class="input-group input-group-lg">
@@ -48,8 +57,10 @@
       </div>
     </div>
   </div>
+  <!-- User card END -->
 </div>
 
+<!-- Message flow START -->
 <div class="talkin-message-panel">
   <div class="message-flow">
     <ul class="message-flow-list">
@@ -70,4 +81,5 @@
     </ul>
   </div>
 </div>
+<!-- Message flow END -->
 

@@ -176,8 +176,30 @@ html, body, main {
   background-color: #337ab7;
 }
 
+.talkin-usercard a:link {
+  text-decoration: none;
+}
+
 .talkin-usercard:hover {
   background-color: #62AAE8;
+}
+
+.onlineuser-list {
+  list-style: none;
+  padding-left: 5px;
+}
+
+.onlineuser-list > li {
+  margin-bottom: 5px;
+}
+
+.onlineuser-list-avatar {
+  float: left;
+}
+
+.onlineuser-list-name {
+  margin-left: 60px;
+  line-height: 1.8;
 }
 
 .usercard-avatar {

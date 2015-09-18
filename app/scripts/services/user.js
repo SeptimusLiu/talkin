@@ -1,12 +1,16 @@
 define(['services/module'], function (serviceModule) {
-    serviceModule.factory('loginService', loginServiceFunc);
-    loginServiceFunc.$inject = ['$q', '$cookieStore', 'socketService',];
+    serviceModule.factory('userService', userServiceFunc);
+    userServiceFunc.$inject = ['$q', '$cookieStore', 'socketService',];
 
     /**
      * Service for login validation
      */
-    function loginServiceFunc($q, $cookieStore, socketService) {   
+    function userServiceFunc($q, $cookieStore, socketService) {   
       var services = {
+        listenUser: function (callback) {
+          socketService.on('user:get', callback);
+        },
+
         addUser: function (user) {
           var deferred = $q.defer();
           if (user) {
@@ -38,6 +42,10 @@ define(['services/module'], function (serviceModule) {
           }
           
           return deferred.promise;
+        },
+
+        getOnlineUsers: function (callback) {
+          socketService.emit('user:get', '', callback);
         }
       };
 

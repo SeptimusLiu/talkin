@@ -10,8 +10,8 @@ define(['states/module'],
             .state("main", {
               url: "/",
               resolve: {
-                getUserPromise: ['loginService', function (loginService) {
-                  return loginService.getUser()
+                getUserPromise: ['userService', function (userService) {
+                  return userService.getUser()
                     .then(function (userItem) {
                       return userItem;
                     }, function () {

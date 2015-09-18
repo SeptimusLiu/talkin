@@ -1,8 +1,8 @@
 define(['controllers/module'], function(controllers) {
 	controllers.controller('mainController', mainControllerFunc);
-	mainControllerFunc.$inject = ['$scope', '$q', 'channelService', 'socketService', 'messageService', '$state', '$cookieStore', '$modal', 'getUserPromise'];
+	mainControllerFunc.$inject = ['$scope', '$q', 'channelService', 'socketService', 'messageService', 'userService', '$state', '$cookieStore', '$modal', 'getUserPromise'];
 
-	function mainControllerFunc($scope, $q, channelService, socketService, messageService, $state, $cookieStore, $modal, getUserPromise) {
+	function mainControllerFunc($scope, $q, channelService, socketService, messageService, userService, $state, $cookieStore, $modal, getUserPromise) {
 		var vm = this;
 		vm.user = {};
 		if (!(vm.user = getUserPromise)) {
@@ -12,16 +12,19 @@ define(['controllers/module'], function(controllers) {
 		
 		vm.messages =[];
 	 	vm.channels = [];
-	 	vm.whisperers = [
-			{ name: 'User 1', active: true },
-			{ name: 'User 2' }
-		];
 
 		vm.sendMessage = sendMessageFunc;
 		vm.openModal = openModalFunc;
 		vm.getMessages = getMessagesFunc;
 		vm.removeMessage = removeMessageFunc;
 
+		userService.listenUser(function (userList) {
+			vm.users = userList;
+		});
+
+		userService.getOnlineUsers(function (userList) {
+			vm.users = userList;
+		});
 		/**
 		 * Add a listener for message removing event.
 		 */

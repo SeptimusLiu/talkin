@@ -1,8 +1,8 @@
 define(['controllers/module'], function(controllers) {
 	controllers.controller('loginController', loginControllerFunc);
-	loginControllerFunc.$inject = ['$scope', '$state', '$cookieStore', 'loginService'];
+	loginControllerFunc.$inject = ['$scope', '$state', '$cookieStore', 'userService'];
 
-	function loginControllerFunc($scope, $state, $cookieStore, loginService) {
+	function loginControllerFunc($scope, $state, $cookieStore, userService) {
 		var vm = this;
 		vm.picked = 0;
 		vm.loginForm = {};
@@ -18,7 +18,7 @@ define(['controllers/module'], function(controllers) {
 				id: user_id,
 				avatar_id: vm.picked
 			};
-			loginService.addUser(user).then(function (userItem) {
+			userService.addUser(user).then(function (userItem) {
 				console.log(userItem);
 				$state.go('main');
 			}, function (e) {
