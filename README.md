@@ -1,12 +1,22 @@
 # talkin
 
-This project is generated with [yo angular generator](https://github.com/yeoman/generator-angular)
-version 0.12.1.
+一个web端的实时聊天系统，采用Nodejs express + angular + bootstrap搭建，可在局域网内建立内部实时聊天服务。
 
-## Build & development
+## 主要功能
 
-Run `grunt` for building and `grunt serve` for preview.
+1. 自定义昵称和选择头像
+2. 创建频道和订阅频道
+3. 在不同的频道发送消息，并接收订阅频道的消息
+4. 撤回自己发送的消息
+5. 获取在线用户列表
 
-## Testing
+## 构建 & 运行
 
-Running `grunt test` will run the unit tests with karma.
+1. 下载代码
+2. 执行`bower install`
+3. 执行`npm install`
+4. 执行`grunt`
+
+## 后续计划
+
+@功能开发了一部分，另外计划加入markdown编辑器以及私信聊天等。
