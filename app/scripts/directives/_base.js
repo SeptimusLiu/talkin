@@ -1,5 +1,5 @@
 define([
-	'./module', './login', './avatarPicker'
+	'./module', './login', './avatarPicker', './atBox'
 ], function() {
 
 })
