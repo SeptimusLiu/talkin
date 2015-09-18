@@ -128,7 +128,7 @@ define(['controllers/module'], function(controllers) {
 		function _setActiveTag(tags, id) {
 			angular.forEach(tags, function(item) {
 				item.active = false;
-				if (item.id === id)
+				if (item.id == id)
 					item.active = true;
 			});
 		}
@@ -145,7 +145,7 @@ define(['controllers/module'], function(controllers) {
 		function _getTagIndexById(tags, id) {
 			var resIndex = -1;
 			angular.forEach(tags, function(item, index) {
-				if (item.id === id)
+				if (item.id == id)
 					resIndex = index;
 			});
 			return resIndex;
