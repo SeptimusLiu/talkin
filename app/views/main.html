@@ -79,3 +79,7 @@
 </div>
 <!-- Message flow END -->
 
+<div ng-show="mainCtrl.notifications.length" class="talkin-notify-box">
+  <alert ng-repeat="alert in mainCtrl.notifications" type="success" close="notified($index)">{{ alert.user_name }} has just mentioned you in {{ alert.channel_name }}</alert>
+</div>
+

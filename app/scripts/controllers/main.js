@@ -1,8 +1,8 @@
 define(['controllers/module'], function(controllers) {
 	controllers.controller('mainController', mainControllerFunc);
-	mainControllerFunc.$inject = ['$scope', '$q', 'channelService', 'socketService', 'messageService', 'userService', '$state', '$cookieStore', '$modal', 'getUserPromise'];
+	mainControllerFunc.$inject = ['$scope', '$q', '$timeout', 'channelService', 'socketService', 'messageService', 'userService', '$state', '$cookieStore', '$modal', 'getUserPromise'];
 
-	function mainControllerFunc($scope, $q, channelService, socketService, messageService, userService, $state, $cookieStore, $modal, getUserPromise) {
+	function mainControllerFunc($scope, $q, $timeout, channelService, socketService, messageService, userService, $state, $cookieStore, $modal, getUserPromise) {
 		var vm = this;
 		vm.user = {};
 		if (!(vm.user = getUserPromise)) {
@@ -12,11 +12,13 @@ define(['controllers/module'], function(controllers) {
 		
 		vm.messages =[];
 	 	vm.channels = [];
+	 	vm.notifications = [];
 
 		vm.sendMessage = sendMessageFunc;
 		vm.openModal = openModalFunc;
 		vm.getMessages = getMessagesFunc;
 		vm.removeMessage = removeMessageFunc;
+		vm.notified = notifiedFunc;
 
 		userService.listenUser(function (userList) {
 			vm.users = userList;
@@ -30,6 +32,16 @@ define(['controllers/module'], function(controllers) {
 		 */
 		messageService.listenMessage(function (messageList) {
 			_updateMessageList(messageList);
+		});
+
+		messageService.listenNotification(function (notification) {
+			vm.notifications.push(notification);
+			(function (index) {
+				$timeout((function () {
+					vm.notifications.splice(index, 1);
+				}), 2000);
+			})(vm.notifications.length - 1);
+			console.log(JSON.stringify(notification));
 		});
 
 		messageService.recvMessage(function (messageItem) {
@@ -104,6 +116,10 @@ define(['controllers/module'], function(controllers) {
 			}, function () {
 
 			});
+		}
+
+		function notifiedFunc(index) {
+			vm.notifications.splice(index, 1);
 		}
 
 		function _updateMessageList(messageList) {

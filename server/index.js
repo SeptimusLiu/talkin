@@ -64,14 +64,20 @@ channels[squareId] = 'Square'; // Default channel
  * users(Array) structures:
  * @id {Number}
  * @name {String}
+ * @socket_id {Number}
  * @last_login_time {Date}
  */
 
 // TODO: Free users after long time not login
 var users = [],
-    onlineUsers = {},
     userMap = {};
 
+/**
+ * onlineUsers(Object) structures:
+ * @socket_id {Number}
+ * @user_id {Number}
+ */
+var onlineUsers = {};
 
 /**
  * Listen for socket connection
@@ -180,11 +186,36 @@ function sendMessage(packet) {
       if (!messages[packet.channel_id])
         messages[packet.channel_id] = [];
       messages[packet.channel_id].push(message);
+
+      // Fetch user ids that this message mentioned
+      var atMessage = [],
+          atUsers = [];
+      atMessage = message.content.match(/@\w+\[\d+\];/g);
+      if (atMessage) {
+        atMessage.forEach(function (item) {
+          var userId = item.substring(item.indexOf('[') + 1, item.indexOf(']'));
+          if (userId) {
+            atUsers.push(userId);
+          }
+        });
+      }
+
+      message.content = message.content.replace(/(@\w+)\[\d+\];/g, '$1 ');
+
       var messageItem = {
         message: message,
         channel_id: packet.channel_id
-      }
+      };
       io.sockets.to(packet.channel_id).emit('message:recv', messageItem);
+
+      // Push at info to users
+      atUsers.forEach(function (user, i) {
+        var userIndex = userMap[user];
+        var notification = protocols.notification.construct(packet);
+        notification.channel_name = channels[notification.channel_id];
+        console.log('at ');
+        io.sockets.to(users[userIndex].socket_id).emit('message:notify', notification);
+      });
     }
 }
 
@@ -247,6 +278,7 @@ function joinChannel(channel, fn, socket) {
 function addUser(user, fn, socket) {
   console.log(user.name + ' has joined. user_id: ' + user.id);
   var userItem = {};
+  user.socket_id = socket.id;
   if (user.id && user.id in userMap) {
     // If user has joined ever, update and then return the user_id in map     
     users[userMap[user.id]] = user;

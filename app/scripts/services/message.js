@@ -15,6 +15,10 @@ define(['services/module'], function (serviceModule) {
           socketService.on('message:get', callback);
         },
 
+        listenNotification: function (callback) {
+          socketService.on('message:notify', callback);
+        },
+
         recvMessage: function(callback) {
           socketService.on('message:recv', callback);
         },
