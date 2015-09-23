@@ -25,7 +25,7 @@
           <div class="onlineuser-list-avatar">
             <img ng-src="/images/avatar_{{ user.avatar_id }}.jpg" height="50" width="50">
           </div>
-          <h5 class="onlineuser-list-name">{{ user.name }}</h5>
+          <h5 tooltip="User id: {{ user.id }}" class="onlineuser-list-name">{{ user.name }}</h5>
           </a>
         </li>
       </ul>
@@ -49,11 +49,7 @@
       </a>
     </div>
     <div class="message-input-box">
-      <div class="input-group input-group-lg">
-        <textarea rows="1" class="form-control textarea-fixed" placeholder="I wanna say..." ng-model="mainCtrl.message"></textarea>
-        <span class="input-group-btn">
-          <button ng-click="mainCtrl.sendMessage()" class="btn btn-primary" type="button">SEND</button>
-        </span>
+      <div at-box items="mainCtrl.users" message="mainCtrl.message" send="mainCtrl.sendMessage()">       
       </div>
     </div>
   </div>

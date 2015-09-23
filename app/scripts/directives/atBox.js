@@ -4,25 +4,37 @@ define(['directives/module'], function(directives) {
 
 	function atBoxFunc($compile) {
 		return {
-			require: 'ngModel',
+			replace: true,
 			restrict: 'A',
+			scope: {
+				'items': '=',
+				'message': '=',
+				'send': '&'	
+			},
+			templateUrl: 'scripts/partial/atBox.html',
 			link: function (scope, element, attrs) {
-				var users = [];
-				var template = '<div class="popover top fade in" style="display: block; top: -50px; left: 0; width: 73.7344px; height: 62px;">\
+				var template = '<div class="popover top fade in" style="display: block; top: -50px; left: 0;">\
   											<div class="arrow"></div><div class="popover-inner">\
   											<div class="popover-content"><div class="talkin-option-wrapper">\
-												<ul>\
-													<li ng-repeat="item in mainCtrl.users"><a href="javascript:;">{{item.name}}</a></li>\
+												<ul><li ng-repeat="item in items track by $index"><a ng-click="atUser($index);" href="javascript:;">{{ item.name }}({{ item.id }})</a></li>\
 												</ul></div></div></div></div>';
 				
-				scope.$watch(attrs.ngModel, function (value) {
-					element.siblings('.popover').remove();
-					if (value && value.charAt(value.length - 1) == '@') {
+				scope.$watch('message', function (newVal, oldVal) {
+					element.find('.popover').remove();
+					if (newVal !== oldVal && newVal.charAt(newVal.length - 1) == '@') {
 						console.log('@');
-						element.before(template);
-						$compile(element.contents())(scope);
+						element.prepend(template);
+						$compile(element.find('.popover').contents())(scope);
 					}
 				});
+
+				scope.atUser = function (index) {
+					element.find('.popover').remove();
+					if (scope.items[index]) {
+						scope.message += scope.items[index].name + '[' + scope.items[index].id + '];';
+						element.find('textarea').focus();
+					}
+				}
 			}
 		}
 	}
